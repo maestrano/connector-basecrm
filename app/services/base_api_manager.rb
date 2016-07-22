@@ -19,8 +19,7 @@ class BaseAPIManager
       #the meta field is retrieved indipendently to avoid conflicting with DataParser
       meta = JSON.parse(response)['meta']
       #DataParser strips the response from 'items' and 'data' fields
-      parsed_response = DataParser.from_base_collection(response)
-      entities = parsed_response
+      entities = DataParser.from_base_collection(response)
 
       unless batched_call
         while meta['links']['next_page']
@@ -83,10 +82,6 @@ class BaseAPIManager
   end
 
   def headers_post_put
-    {
-      "Accept" => "application/json",
-      "Content-Type" => "application/json",
-      "Authorization" => "Bearer #{organization.oauth_token}"
-    }
+    headers_get.merge("Content-Type" => "application/json")
   end
 end
