@@ -73,7 +73,7 @@ class BaseAPIManager
     response = RestClient.get "https://api.getbase.com/v2/accounts/self", headers_get
     DataParser.from_base_single(response.body)
   rescue => e
-    standard_rescue(e, external_entity_name)
+    standard_rescue(e, 'Account')
   end
 
   private
