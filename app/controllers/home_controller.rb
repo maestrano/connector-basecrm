@@ -1,5 +1,5 @@
 class HomeController < ApplicationController
-def update
+  def update
     return redirect_to(:back) unless is_admin
 
     # Update list of entities to synchronize
