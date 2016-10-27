@@ -12,14 +12,14 @@ gem 'tzinfo-data', platforms: [:mingw, :mswin, :jruby]
 gem 'uglifier', '>= 1.3.0'
 gem 'config'
 
-gem 'maestrano-connector-rails', '2.0.0.pre.RC6'
+gem 'maestrano-connector-rails', '2.0.0.pre.RC12'
 
 gem 'oauth2'
 gem 'basecrm'
 
 group :production, :uat do
-  gem 'activerecord-jdbcmysql-adapter', :platforms => :jruby
-  gem 'mysql2', :platforms => :ruby
+  gem 'activerecord-jdbcmysql-adapter', platforms: :jruby
+  gem 'mysql2', platforms: :ruby
   gem 'rails_12factor'
 end
 

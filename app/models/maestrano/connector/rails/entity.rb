@@ -63,6 +63,5 @@ class Maestrano::Connector::Rails::Entity < Maestrano::Connector::Rails::EntityB
     def set_deleted_entity_inactive(e, external_id)
       idmap = Maestrano::Connector::Rails::IdMap.find_by(organization_id: @organization.id, external_id: external_id)
       idmap.update!(message: "The #{external_entity_name} record has been deleted in Base. Last attempt to sync on #{Time.now}", external_inactive: true)
-      Rails.logger.warn "#{e}. It is now set to inactive."
     end
 end

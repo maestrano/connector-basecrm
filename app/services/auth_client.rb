@@ -3,23 +3,13 @@ require "singleton"
 class AuthClient
   include Singleton
 
-  # Requests oauth2 code
-  def self.authorize(auth_params)
+  def self.oauth_client
     OAuth2::Client.new(
       ENV['base_client_id'],
       ENV['base_client_secret'],
-      site: "https://api.getbase.com",
-      authorize_url: "/oauth2/authorize?#{auth_params}"
-    )
-  end
-
-  # Obtains oauth2 token
-  def self.obtain_token
-    OAuth2::Client.new(
-      ENV['base_client_id'],
-      ENV['base_client_secret'],
-      site: "https://api.getbase.com",
-      token_url: "/oauth2/token"
+      site: 'https://api.getbase.com',
+      authorize_url: '/oauth2/authorize',
+      token_url: '/oauth2/token'
     )
   end
 

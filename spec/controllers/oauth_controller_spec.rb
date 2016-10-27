@@ -2,10 +2,10 @@ require 'spec_helper'
 
 describe OauthController, :type => :controller do
   describe 'request_omniauth' do
-    let(:organization) { create(:organization, uid: 'uid-123') }
-    before {
-      allow_any_instance_of(Maestrano::Connector::Rails::SessionHelper).to receive(:current_organization).and_return(organization)
-    }
+    let(:organization) { create(:organization) }
+
+    before { allow_any_instance_of(Maestrano::Connector::Rails::SessionHelper).to receive(:current_organization).and_return(organization) }
+
     subject { get :request_omniauth, provider: 'basecrm' }
 
     context 'when not admin' do
@@ -22,7 +22,7 @@ describe OauthController, :type => :controller do
       }
 
       it "Redirects to Base authorize endpoint" do
-        expect(subject.redirect_url).to match(/https:\/\/api.getbase.com\/oauth2\/authorize.+?state=uid-123$/)
+        expect(subject.redirect_url).to match(/https:\/\/api.getbase.com\/oauth2\/authorize\?.+$/)
       end
     end
   end
@@ -52,15 +52,14 @@ describe OauthController, :type => :controller do
 
     context 'when organization is found' do
       let!(:organization) { create(:organization, tenant: 'default', uid: uid) }
-      let(:token) { OpenStruct.new(token: "123", refresh_token: "456")}
-      let!(:company) { OpenStruct.new(id: "id12345")}
+      let(:token) { OpenStruct.new(token: "123", refresh_token: "456") }
+      let!(:company) { OpenStruct.new(id: "id12345") }
       let(:client) { double(BaseCRM::Client)}
 
+      before { allow_any_instance_of(Maestrano::Connector::Rails::SessionHelper).to receive(:current_organization).and_return(organization) }
+
       context 'when not admin' do
-        before {
-          allow_any_instance_of(Maestrano::Connector::Rails::SessionHelper).to receive(:is_admin?).and_return(false)
-          allow_any_instance_of(Maestrano::Connector::Rails::SessionHelper).to receive(:current_organization).and_return(organization)
-        }
+        before { allow_any_instance_of(Maestrano::Connector::Rails::SessionHelper).to receive(:is_admin).and_return(false) }
 
         it 'does nothing' do
           expect(Maestrano::Connector::Rails::External).to_not receive(:fetch_user)
@@ -70,18 +69,18 @@ describe OauthController, :type => :controller do
 
       context 'when admin' do
         before {
-          allow_any_instance_of(Maestrano::Connector::Rails::SessionHelper).to receive(:is_admin?).and_return(true)
-          allow_any_instance_of(Maestrano::Connector::Rails::SessionHelper).to receive(:current_organization).and_return(organization)
-          allow_any_instance_of(OAuth2::Strategy::AuthCode).to receive(:get_token) { token}
-          expect_any_instance_of(Organization).to receive(:update_omniauth) { organization.oauth_uid = "test-uid"}
-          allow(BaseCRM::Client).to receive(:new).with(access_token: "123") { client}
-          allow(client).to receive(:accounts) { client}
-          allow(client).to receive(:self)
+          allow_any_instance_of(Maestrano::Connector::Rails::SessionHelper).to receive(:is_admin).and_return(true)
+          allow_any_instance_of(OAuth2::Strategy::AuthCode).to receive(:get_token) { token }
+          allow(BaseCRM::Client).to receive(:new).with(access_token: "123") { client }
+          allow_any_instance_of(BaseAPIManager).to receive(:get_account) { {'id' => 'id12345', 'name' => 'My Company'} }
         }
 
         it 'updates the organization with data from oauth and api calls' do
           callback
-          expect(organization.oauth_uid).to eq "test-uid"
+          expect(organization.oauth_token).to eq "123"
+          expect(organization.refresh_token).to eq "456"
+          expect(organization.oauth_provider).to eq "basecrm"
+          expect(organization.oauth_uid).to eq "id12345"
         end
       end
     end
@@ -102,11 +101,12 @@ describe OauthController, :type => :controller do
       let(:user) { Maestrano::Connector::Rails::User.new(email: 'test@email.com', tenant: 'default') }
       before {
         allow_any_instance_of(Maestrano::Connector::Rails::SessionHelper).to receive(:current_user).and_return(user)
+        allow_any_instance_of(Maestrano::Connector::Rails::SessionHelper).to receive(:current_organization).and_return(organization)
       }
 
       context 'when not admin' do
         before {
-          allow_any_instance_of(Maestrano::Connector::Rails::SessionHelper).to receive(:is_admin?).and_return(false)
+          allow_any_instance_of(Maestrano::Connector::Rails::SessionHelper).to receive(:is_admin).and_return(false)
         }
 
         it {expect{ subject }.to_not change{ organization.oauth_uid }}
@@ -114,7 +114,7 @@ describe OauthController, :type => :controller do
 
       context 'when admin' do
         before {
-          allow_any_instance_of(Maestrano::Connector::Rails::SessionHelper).to receive(:is_admin?).and_return(true)
+          allow_any_instance_of(Maestrano::Connector::Rails::SessionHelper).to receive(:is_admin).and_return(true)
         }
 
         it {

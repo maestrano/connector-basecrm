@@ -1,31 +1,38 @@
 class OauthController < ApplicationController
-
   def request_omniauth
-    if is_admin
-      auth_params = {state: current_organization.uid}
-      client = AuthClient.authorize(QueryParamsManager.query_params(auth_params))
-      redirect_to client.auth_code.authorize_url(redirect_uri: redirect_uri)
-    else
-      redirect_to root_url
-    end
+    return redirect_to root_url unless is_admin
+
+    client = AuthClient.oauth_client
+    redirect_to client.auth_code.authorize_url(redirect_uri: redirect_uri)
   end
 
   def create_omniauth
-    org_uid = params[:state]
-    organization = Organization.find_by_uid_and_tenant(org_uid, current_user.tenant)
-    if organization && is_admin?(current_user, organization)
-      client = AuthClient.obtain_token
+    return redirect_to root_url unless is_admin
+
+    begin
       if params[:code].present?
+        client = AuthClient.oauth_client
         token = client.auth_code.get_token(params[:code], redirect_uri: redirect_uri)
-        organization.update_omniauth(token)
+
+        # Update OAuth
+        current_organization.update!(oauth_token: token.token, refresh_token: token.refresh_token, oauth_provider: 'basecrm')
+
+        # Fetch company
+        company = Maestrano::Connector::Rails::External.fetch_company(current_organization)
+        current_organization.update!(oauth_uid: company['id'], oauth_name: company['name'], oauth_provider: 'basecrm')
       end
+    rescue => e
+      Maestrano::Connector::Rails::ConnectorLogger.log('warn', current_organization, "Error validating API credentials: #{e.message}, #{e.backtrace.join("\n")}")
+      flash[:error] = "Cannot link account: #{e.message}"
     end
+
     redirect_to root_url
   end
 
   def destroy_omniauth
-    organization = Organization.find_by_id(params[:organization_id])
-    organization.revoke_omniauth if organization && is_admin?(current_user, organization)
+    return redirect_to root_url unless is_admin
+
+    current_organization.clear_omniauth
 
     redirect_to root_url
   end
