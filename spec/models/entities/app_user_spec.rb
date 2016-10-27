@@ -14,7 +14,7 @@ end
 describe 'instance methods' do
 
   let(:organization) { create(:organization) }
-  let(:connec_client) { Maestrano::Connec::Client[organization.tenant].new(organization.uid) }
+  let(:connec_client) { Maestrano::Connector::Rails::ConnecHelper.get_client(organization) }
   let(:external_client) { Maestrano::Connector::Rails::External.get_client(organization) }
   let(:opts) { {} }
   subject { Entities::AppUser.new(organization, connec_client, external_client, opts) }
@@ -36,7 +36,7 @@ describe 'instance methods' do
 
     let (:mapped_external_hash) {
       {
-        "id" => [{"id"=>123456, "provider"=>organization.oauth_provider, "realm"=>organization.oauth_uid}],
+        "id" => [{"id"=>123456, "provider"=>"this_app", "realm"=>organization.oauth_uid}],
         "first_name" => "John",
         "last_name" => "Doe",
         "is_admin" => true,

@@ -16,6 +16,8 @@ require 'maestrano_connector_rails/factories.rb'
 
 Rails.backtrace_cleaner.remove_silencers!
 
+Maestrano.reset!
+
 RSpec.configure do |config|
   config.mock_with :rspec
   config.use_transactional_fixtures = true

@@ -1,3 +1,9 @@
+encryption_key1: d4997b2c-cd18-4fee-9bb5-02f6c8e747e6
+encryption_key2: 9d9bf21c-b756-4d54-ae67-6890ddfe5fbb
+
+SIDEKIQ_USERNAME: admin
+SIDEKIQ_PASSWORD: password
+
 base_client_id: 'your Base client ID'
 base_client_secret: 'your Base client secret'
 
@@ -5,6 +11,6 @@ REDIS_URL: redis://localhost:6379/0/connector-basecrm
 
 MNO_DEVPL_HOST: https://dev-platform.maestrano.io
 MNO_DEVPL_API_PATH: /api/config/v1/marketplaces
-MNO_DEVPL_ENV_NAME: basecrm-uat
-MNO_DEVPL_ENV_KEY:
-MNO_DEVPL_ENV_SECRET:
+MNO_DEVPL_ENV_NAME: connector-basecrm
+MNO_DEVPL_ENV_KEY: changeme
+MNO_DEVPL_ENV_SECRET: changeme

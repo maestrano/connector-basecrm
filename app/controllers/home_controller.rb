@@ -1,5 +1,4 @@
 class HomeController < ApplicationController
-
   def update
     return redirect_to(:back) unless is_admin
 
