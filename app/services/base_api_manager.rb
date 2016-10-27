@@ -6,7 +6,7 @@ class BaseAPIManager
     @organization = organization
   end
 
-  #Fetches all the resources for the specific entity
+  # Fetches all the resources for the specific entity
   def get_entities(entity_name, opts = {}, last_synchronization_date = nil)
     with_token_refresh do
       batched_call = opts[:__skip] && opts[:__limit]
@@ -34,13 +34,15 @@ class BaseAPIManager
       entities
     end
   rescue => e
-    Rails.logger.warn "Error while fetching #{entity_name.pluralize}. Error: #{e}"
-    raise "Error while fetching #{entity_name}. Error: #{e}"
+    Maestrano::Connector::Rails::ConnectorLogger.log('warn', @organization, "Error fetching entities", {entity_name: entity_name, message: e.message, backtrace: e.backtrace})
+
+    # Fetching Products without a correct subscription returns a 500 error
+    return []
   end
 
-  #creates an entity with the parameters passed
+  # Creates an entity with the parameters passed
   def create_entities(mapped_connec_entity, external_entity_name)
-    #DataParser adds the 'data' field before pushing to BaseCRM
+    # DataParser adds the 'data' field before pushing to BaseCRM
     body = DataParser.to_base(mapped_connec_entity)
     payload = JSON.generate(body)
     with_token_refresh do
@@ -52,7 +54,7 @@ class BaseAPIManager
     standard_rescue(e, external_entity_name)
   end
 
-  #updates an existing entity with the parameters provided
+  # Ipdates an existing entity with the parameters provided
   def update_entities(mapped_connec_entity, external_id, external_entity_name)
     body = DataParser.to_base(mapped_connec_entity)
     payload = JSON.generate(body)
@@ -62,11 +64,11 @@ class BaseAPIManager
       DataParser.from_base_single(response.body)
     end
   rescue => e
-      if e.class == RestClient::ResourceNotFound
-        raise Exceptions::RecordNotFound.new("The record has been deleted in BaseCRM")
-      else
-        standard_rescue(e, external_entity_name)
-      end
+    if e.class == RestClient::ResourceNotFound
+      raise Exceptions::RecordNotFound.new("The record has been deleted in BaseCRM")
+    else
+      standard_rescue(e, external_entity_name, external_id)
+    end
   end
 
   def get_account
@@ -102,9 +104,8 @@ class BaseAPIManager
       headers_get.merge!("Content-Type" => "application/json")
     end
 
-    def standard_rescue(e, external_entity_name)
-      err = e.respond_to?(:response) ? e.response : e
-      Rails.logger.warn "Error while posting to #{external_entity_name}: #{err}"
+    def standard_rescue(e, external_entity_name = nil, external_id = nil)
+      Maestrano::Connector::Rails::ConnectorLogger.log('warn', @organization, "Error sending entities", {external_entity_name: external_entity_name, external_id: external_id, message: e.message, backtrace: e.backtrace})
       raise e
     end
 

@@ -15,12 +15,11 @@ class OauthController < ApplicationController
         token = client.auth_code.get_token(params[:code], redirect_uri: redirect_uri)
 
         # Update OAuth
-        current_organization.update!(oauth_token: token.access_token, refresh_token: token.refresh_token, oauth_provider: 'basecrm')
+        current_organization.update!(oauth_token: token.token, refresh_token: token.refresh_token, oauth_provider: 'basecrm')
 
         # Fetch company
         company = Maestrano::Connector::Rails::External.fetch_company(current_organization)
-
-        current_organization.update!(oauth_uid: company['id'], oauth_name: company['name'])
+        current_organization.update!(oauth_uid: company['id'], oauth_name: company['name'], oauth_provider: 'basecrm')
       end
     rescue => e
       Maestrano::Connector::Rails::ConnectorLogger.log('warn', current_organization, "Error validating API credentials: #{e.message}, #{e.backtrace.join("\n")}")

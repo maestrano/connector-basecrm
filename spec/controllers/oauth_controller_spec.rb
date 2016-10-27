@@ -52,7 +52,7 @@ describe OauthController, :type => :controller do
 
     context 'when organization is found' do
       let!(:organization) { create(:organization, tenant: 'default', uid: uid) }
-      let(:token) { OpenStruct.new(access_token: "123", refresh_token: "456") }
+      let(:token) { OpenStruct.new(token: "123", refresh_token: "456") }
       let!(:company) { OpenStruct.new(id: "id12345") }
       let(:client) { double(BaseCRM::Client)}
 
