@@ -12,8 +12,11 @@ require 'factory_girl_rails'
 require 'shoulda/matchers'
 require 'support/helpers/api_manager_helper'
 require 'support/helpers/data_helper'
+require 'maestrano_connector_rails/factories.rb'
 
 Rails.backtrace_cleaner.remove_silencers!
+
+Maestrano.reset!
 
 RSpec.configure do |config|
   config.mock_with :rspec
