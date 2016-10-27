@@ -10,7 +10,7 @@ class Maestrano::Connector::Rails::External
   end
 
   def self.create_account_link(organization = nil)
-    'https://getbase.com/base/'
+    'https://getbase.com/'
   end
 
   def self.entities_list
