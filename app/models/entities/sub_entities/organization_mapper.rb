@@ -1,6 +1,12 @@
 class Entities::SubEntities::OrganizationMapper
   extend HashMapper
 
+  def self.organization_references
+    {
+      record_references: %w(assignee_id),
+    }
+  end
+
   after_denormalize do |input, output|
     if input['organization_name']
       output[:name] = input['organization_name']

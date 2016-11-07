@@ -47,11 +47,20 @@ describe BaseAPIManager do
 
     context "#create entities" do
 
+      let(:e) { "The required attribute '/contact_id' must be present in the request" }
+
       it "creates entities" do
         allow(JSON).to receive(:generate) { "Generated JSON"}
         allow(RestClient::Request).to receive(:execute).with(rest_client_arguments_post) { response_entity}
         expect(BaseAPIManager.new(organization).create_entities({"payload" => "test"}, "contact")).
           to eq response_entity.body
+      end
+
+      it "rescues a custom exception if the API returns a specific error" do
+        allow(JSON).to receive(:generate) { "Generated JSON"}
+        allow(RestClient::Request).to receive(:execute) { raise e }
+        expect{ BaseAPIManager.new(organization).create_entities({"payload" => "test"}, "contact")}.
+          to raise_error { "The required attribute '/contact_id' must be present in the request"}
       end
     end
 
@@ -67,7 +76,7 @@ describe BaseAPIManager do
       it "raises a custom exception when an entity is not found" do
         allow(RestClient::Request).to receive(:execute).with(rest_client_arguments_put) { raise RestClient::ResourceNotFound.new}
         expect{ BaseAPIManager.new(organization).update_entities({"payload" => "test"}, "1", "contact")}.
-          to raise_error { Exceptions::RecordNotFound.new}
+          to raise_error { "The record has been deleted in BaseCRM"}
       end
     end
   end
