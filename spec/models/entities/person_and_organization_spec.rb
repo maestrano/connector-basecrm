@@ -10,6 +10,13 @@ describe Entities::PersonAndOrganization do
   describe 'instance methods' do
     subject { Entities::PersonAndOrganization.new(nil, nil, nil, {}) }
 
+    before do
+       subject.instance_variable_set(:@notes, [ {"Description"=>"A note", "ID"=>1, "resource_type" => 'contact'},
+                                                {"Description"=>"A note", "ID"=>2, "resource_type" => 'lead'}
+                                              ]
+                                    )
+    end
+
 
     describe 'connec_model_to_external_model' do
       let(:person) { {'first_name' => 'Arold', 'is_lead' => false} }

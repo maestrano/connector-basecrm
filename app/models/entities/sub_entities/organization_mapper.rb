@@ -1,6 +1,12 @@
 class Entities::SubEntities::OrganizationMapper
   extend HashMapper
 
+  def self.organization_references
+    {
+      record_references: %w(assignee_id),
+    }
+  end
+
   after_denormalize do |input, output|
     if input['organization_name']
       output[:name] = input['organization_name']
@@ -39,4 +45,5 @@ class Entities::SubEntities::OrganizationMapper
   map from('address_work/billing/country'), to('address/country')
 
   map from('website/url'), to('website')
+  map from('notes'), to('notes')
 end

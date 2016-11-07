@@ -34,6 +34,18 @@ describe Entities::SubEntities::Contact do
           "phone"=> "0208111",
           "mobile"=> "0777111",
           "fax"=> "0208000",
+          # Notes are fetched in person_and_organization.rb for each contact
+          "notes"=> [
+            {
+             "id"=>75272026,
+             "content"=>"Another NOTE for Mr. Smith",
+             "created_at"=>"2016-11-07T11:20:27Z",
+             "updated_at"=>"2016-11-07T11:20:27Z",
+             "creator_id"=>1027365,
+             "resource_type"=>"contact",
+             "resource_id"=>134706023
+             }
+           ],
           "address" => {
             "city" => "London",
             "postal_code" => "W6 7TN",
@@ -66,7 +78,10 @@ describe Entities::SubEntities::Contact do
               :country => 'United Kingdom'
             }
           },
-          :assignee_type => "AppUser"
+          :assignee_type => "AppUser",
+          :notes => [
+               {"description"=>"Another NOTE for Mr. Smith"}
+          ]
         }.with_indifferent_access
       }
 
