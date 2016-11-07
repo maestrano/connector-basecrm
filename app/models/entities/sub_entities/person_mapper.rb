@@ -1,7 +1,22 @@
 class Entities::SubEntities::PersonMapper
   extend HashMapper
 
+  def self.person_references
+    {
+      record_references: %w(organization_id assignee_id),
+      id_references: %w(notes/id)
+    }
+  end
+
+  def self.lead_references
+    {
+      record_references: %w(assignee_id),
+      id_references: %w(notes/id)
+    }
+  end
+
   after_denormalize do |input, output|
+    # The field is present only in contacts and is false by default
     if input['is_organization'].nil?
       output[:is_lead] = true
       output[:is_customer] = false
@@ -12,7 +27,8 @@ class Entities::SubEntities::PersonMapper
 
   after_normalize do |input, output|
 
-    output.delete('contact_id') if input[:is_lead]
+    output.delete(:contact_id) if input[:is_lead]
+    output.delete(:notes)
     output
   end
 
@@ -33,4 +49,5 @@ class Entities::SubEntities::PersonMapper
   map from('address_work/billing/city'), to('address/city')
   map from('address_work/billing/postal_code'), to('address/postal_code')
   map from('address_work/billing/country'), to('address/country')
+  map from('notes'), to('notes'), using: Entities::SubEntities::NotesMapper
 end

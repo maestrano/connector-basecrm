@@ -16,7 +16,7 @@ class Entities::SubEntities::Organization < Maestrano::Connector::Rails::SubEnti
 
   def self.references
     {
-      'Lead' => %w(assignee_id)
+      'Lead' => Entities::SubEntities::OrganizationMapper.organization_references
     }
   end
 

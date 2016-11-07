@@ -54,7 +54,7 @@ class BaseAPIManager
     standard_rescue(e, external_entity_name)
   end
 
-  # Ipdates an existing entity with the parameters provided
+  # Updates an existing entity with the parameters provided
   def update_entities(mapped_connec_entity, external_id, external_entity_name)
     body = DataParser.to_base(mapped_connec_entity)
     payload = JSON.generate(body)

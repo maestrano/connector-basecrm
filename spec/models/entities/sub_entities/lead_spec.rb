@@ -42,6 +42,18 @@ describe Entities::SubEntities::Lead do
             "industry"=> nil,
             "fax" => "0208111333",
             "website"=> nil,
+            # Notes are fetched in person_and_organization.rb for each contact
+            "notes"=> [
+              {
+               "id"=>75272026,
+               "content"=>"Another NOTE for Mr. Smith",
+               "created_at"=>"2016-11-07T11:20:27Z",
+               "updated_at"=>"2016-11-07T11:20:27Z",
+               "creator_id"=>1027365,
+               "resource_type"=>"contact",
+               "resource_id"=>134706023
+               }
+             ],
             "address"=> {
               "line1"=> "21 Lead street",
               "city"=> "London",
@@ -77,6 +89,9 @@ describe Entities::SubEntities::Lead do
             :mobile => "077745456",
             :fax => "0208111333"
           },
+          :notes => [
+            {"description"=>"Another NOTE for Mr. Smith"}
+          ],
           :address_work => {
             :billing => {
               :line1 => "21 Lead street",

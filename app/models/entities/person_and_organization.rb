@@ -7,6 +7,12 @@ class Entities::PersonAndOrganization < Maestrano::Connector::Rails::ComplexEnti
     %w(Contact Lead)
   end
 
+  def before_sync(last_synchronization_date = nil)
+    super
+    Maestrano::Connector::Rails::ConnectorLogger.log('info', @organization, "Fetching #{Maestrano::Connector::Rails::External.external_name} Notes")
+    @notes = @external_client.get_entities('Notes')
+  end
+
   # input :  {
   #             connec_entity_names[0]: [unmapped_connec_entitiy1, unmapped_connec_entitiy2],
   #             connec_entity_names[1]: [unmapped_connec_entitiy3, unmapped_connec_entitiy4]
@@ -25,6 +31,7 @@ class Entities::PersonAndOrganization < Maestrano::Connector::Rails::ComplexEnti
     organizations = []
     leads_people = []
     leads_organizations = []
+
     #In Connec! Leads are People or Organizations with field 'is_lead' = true
     split_leads_from_connec(connec_hash_of_entities['Person'],
                             leads_people,
@@ -59,6 +66,9 @@ class Entities::PersonAndOrganization < Maestrano::Connector::Rails::ComplexEnti
     contacts = external_hash_of_entities['Contact']
     leads = external_hash_of_entities['Lead']
 
+    import_notes(contacts, 'contact')
+    import_notes(leads, 'lead')
+
     modelled_hash = {'Contact' => { 'Person' => [], 'Organization' => [] },
                      'Lead' => {'Person' => [], 'Organization' => []}
                     }
@@ -84,6 +94,13 @@ class Entities::PersonAndOrganization < Maestrano::Connector::Rails::ComplexEnti
         else
           modelled_hash[entity_name]['Person'] << entity
         end
+      end
+    end
+
+    def import_notes(array_of_entities, entity_type)
+      array_of_entities.each do |entity|
+        entity['notes'] ||= []
+        entity['notes'].concat @notes.select { |note| note['resource_type'] == entity_type && note['resource_id'] == entity['id']}
       end
     end
 end
