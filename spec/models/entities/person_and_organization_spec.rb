@@ -10,7 +10,6 @@ describe Entities::PersonAndOrganization do
   describe 'instance methods' do
     subject { Entities::PersonAndOrganization.new(nil, nil, nil, {}) }
 
-
     describe 'connec_model_to_external_model' do
       let(:person) { {'first_name' => 'Arold', 'is_lead' => false} }
       let(:organization) { {'name' => 'TestOptima', 'is_lead' => false} }
