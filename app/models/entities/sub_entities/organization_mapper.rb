@@ -27,6 +27,7 @@ class Entities::SubEntities::OrganizationMapper
       # Base CRM does not provide 2 fields for landlines
       output[:mobile] ||= input['phone']['landline2'] if input['phone']['landline2']
     end
+
     output
   end
 
@@ -40,11 +41,11 @@ class Entities::SubEntities::OrganizationMapper
 
   map from('assignee_id'), to('owner_id', &:to_i)
 
-  map from('address_work/billing/line1'), to('address/line1')
-  map from('address_work/billing/city'), to('address/city')
-  map from('address_work/billing/postal_code'), to('address/postal_code')
-  map from('address_work/billing/region'), to('address/state')
-  map from('address_work/billing/country'), to('address/country')
+  map from('address/billing/line1'), to('address/line1')
+  map from('address/billing/city'), to('address/city')
+  map from('address/billing/postal_code'), to('address/postal_code')
+  map from('address/billing/region'), to('address/state')
+  map from('address/billing/country'), to('address/country')
 
   map from('website/url'), to('website')
 end

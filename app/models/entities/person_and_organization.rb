@@ -1,6 +1,6 @@
 class Entities::PersonAndOrganization < Maestrano::Connector::Rails::ComplexEntity
   def self.connec_entities_names
-    %w(Person Organization)
+    %w(Organization Person)
   end
 
   def self.external_entities_names

@@ -127,7 +127,7 @@ describe Entities::SubEntities::Contact do
             :mobile => "0208333",
             :fax => "0208000"
           },
-          :address_work => {
+          :address => {
             :billing => {
               :city => 'London',
               :postal_code => 'W6 7TN',

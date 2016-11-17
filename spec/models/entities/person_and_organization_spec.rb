@@ -4,7 +4,7 @@ describe Entities::PersonAndOrganization do
   describe 'class methods' do
     subject { Entities::PersonAndOrganization }
 
-    it { expect(subject.connec_entities_names).to eql(%w(Person Organization)) }
+    it { expect(subject.connec_entities_names).to eql(%w(Organization Person)) }
     it { expect(subject.external_entities_names).to eql(%w(Contact Lead)) }
   end
   describe 'instance methods' do
