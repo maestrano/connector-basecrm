@@ -19,19 +19,23 @@ describe Entities::SubEntities::Organization do
     describe '#map_to base Contact' do
       let(:connec_hash) {
         {
-          :name => "Test Company",
-          :industry => "ITC",
-          :email => {
-            :address => "test@test.com"
+          'name' => "Test Company",
+          'industry' => "ITC",
+          'email' => {
+            'address' => "test@test.com"
           },
-          :website => {
-            :url => "http://test.com"
+          'website' => {
+            'url' => "http://test.com"
           },
-          :address_work => {
-            :billing => {
-              :city => 'London',
-              :line1 => '37 Kinderton Gardens',
-              :country => "United Kingdom"
+          'phone' => {
+            'landline' => "0208 777 444 56",
+            'landline2' => "0208 777 444 56"
+          },
+          'address_work' => {
+            'billing' => {
+              'city' => 'London',
+              'line1' => '37 Kinderton Gardens',
+              'country' => "United Kingdom"
             }
           }
         }
@@ -39,16 +43,18 @@ describe Entities::SubEntities::Organization do
 
       let(:mapped_connec_hash) {
         {
-          'name' => 'Test Company',
-          'industry' => 'ITC',
-          'email' => "test@test.com",
-          'website' => "http://test.com",
-          'is_organization' => true,
-          'address' => {
-            'line1' => '37 Kinderton Gardens',
-            'city' => 'London',
-            'country' => 'United Kingdom'
-            }
+          :name => 'Test Company',
+          :industry => 'ITC',
+          :email => "test@test.com",
+          :website => "http://test.com",
+          :is_organization => true,
+          :mobile => "0208 777 444 56",
+          :phone => "0208 777 444 56",
+          :address => {
+            :line1 => '37 Kinderton Gardens',
+            :city => 'London',
+            :country => 'United Kingdom'
+          }
           }.with_indifferent_access
         }
 

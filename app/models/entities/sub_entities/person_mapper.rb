@@ -27,7 +27,7 @@ class Entities::SubEntities::PersonMapper
 
   after_normalize do |input, output|
 
-    output.delete(:contact_id) if input[:is_lead]
+    output.delete(:contact_id) if input['is_lead']
     output
   end
 

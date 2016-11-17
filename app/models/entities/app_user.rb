@@ -34,7 +34,7 @@ class AppUserMapper
 
   # Mapping to BaseCRM
   after_normalize do |input, output|
-    output[:name] = [input["first_name"], input["last_name"]].join(' ')
+    output[:name] = [input['first_name'], input['last_name']].join(' ')
     output
   end
 
