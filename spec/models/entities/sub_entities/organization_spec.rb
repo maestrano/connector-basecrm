@@ -31,10 +31,12 @@ describe Entities::SubEntities::Organization do
             'landline' => "0208 777 444 56",
             'landline2' => "0208 777 444 56"
           },
-          'address_work' => {
+          'address' => {
             'billing' => {
               'city' => 'London',
               'line1' => '37 Kinderton Gardens',
+              'region' => 'Greater London',
+              'postal_code' => 'T1 T23',
               'country' => "United Kingdom"
             }
           }
@@ -53,6 +55,8 @@ describe Entities::SubEntities::Organization do
           :address => {
             :line1 => '37 Kinderton Gardens',
             :city => 'London',
+            :postal_code => 'T1 T23',
+            :state => 'Greater London',
             :country => 'United Kingdom'
           }
           }.with_indifferent_access

@@ -27,6 +27,7 @@ describe Entities::SubEntities::Lead do
             "owner_id"=> 960788,
             "first_name"=> "John",
             "last_name"=> "Lead",
+            "organization_name"=> "TEST Ltd.",
             "source_id"=> 342382,
             "created_at"=> "2016-07-28T13:28:43Z",
             "updated_at"=> "2016-07-28T13:28:43Z",
@@ -166,7 +167,7 @@ describe Entities::SubEntities::Lead do
             :mobile => "0745111222",
             :fax => "0208111333"
           },
-          :address_work => {
+          :address => {
             :billing => {
               :line1 => "99 Lead Company",
               :city => "Edinburgh",
