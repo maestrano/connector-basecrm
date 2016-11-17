@@ -9,68 +9,41 @@ The aim of this connector is to implement data sharing between Connec! and BaseC
 Configure your BaseCRM application. To create a new BaseCRM application:
 https://app.futuresimple.com
 
-Create a configuration file `config/application.yml` with the following settings (complete with your BaseCRM / Connec! credentials)
+### Access Maestrano Developer Platform and create a sandbox application
+
+:soon: :construction:
+
+
+Edit the configuration file `config/application-sample.yml` with the correct credentials (both BaseCRM's and Maestrano's Developer Platform ones).
 ```
-connec_api_id:
-connec_api_key:
-base_client_id:
-base_client_secret:
+encryption_key1: ''
+encryption_key2: ''
+
+base_client_id: 'your_base_id'
+base_client_secret: 'your_base_secret'
+
+REDIS_URL: redis://localhost:6379/0/connector-base
+
+MNO_DEVPL_HOST: https://dev-platform.maestrano.io
+MNO_DEVPL_API_PATH: /api/config/v1/marketplaces
+MNO_DEVPL_ENV_NAME: base-uat
+MNO_DEVPL_ENV_KEY: 'your_local_env_key'
+MNO_DEVPL_ENV_SECRET: 'your_local_env_secret'
+
 ```
+
+### Run the connector locally against the Maestrano UAT environment
+
 ### Run the connector
 #### First time setup
 ```
-
-# Install JRuby and gems the first time, install redis-server
-rvm or rbenv install jruby-9.0.5.0
+# Install bundler and update your gemset
+gem install ruby-2.3.1
 gem install bundler
 bundle
-gem install foreman
 ```
-
-Visit: http://redis.io/download to download and install redis
 
 #### Start the application
-In two different terminal windows run:
 ```
-redis-server
-foreman start
+bin/rails s puma -p 3001
 ```
-
-### Run the connector locally against the Maestrano production environment
-Add in the application.yml file the following properties:
-```
-api_host: 'http://localhost:3000'
-connec_host: 'http://localhost:8080'
-```
-
-### Test webhooks
-Install [ngrok](https://ngrok.com)
-Start in on your application port (for example 3000)
-```
-ngrok http 3000
-```
-this will open a console with an url that is tunnelling to your localhost (for example https://aee0c964.ngrok.io)
-update the `app_host` in the application.yml and the redirect_url in base_client.rb
-```
-app_host: 'https://aee0c964.ngrok.
-```
-then edit your app settings in BaseCRM
-
-Login into your base account
-Go to `settings`
-Open `Oauth` tab
-Modify your developer app settings
-
-### Update application metadata
-
-Login into your Maestrano Account.
-Access the API tab.
-Select the Sandbox-BaseCRM1 tab.
-update the field `Metadata URL` with
-
-```
-{{your ngrok tunnel or website }}/maestrano/metadata
-
-```
-
-Click on `Update/Fetch`
