@@ -161,7 +161,7 @@ describe Entities::SubEntities::Lead do
           :contact_channel => {
             :skype => "itccompany"
           },
-          :phone_work => {
+          :phone => {
             :landline => "0208111222",
             :mobile => "0745111222",
             :fax => "0208111333"

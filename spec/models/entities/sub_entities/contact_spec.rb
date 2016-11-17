@@ -99,6 +99,7 @@ describe Entities::SubEntities::Contact do
           "is_organization"=> true,
           "phone"=> "0208111",
           "fax"=> "0208000",
+          "mobile"=> "0208333",
           "address" => {
             "city" => "London",
             "postal_code" => "W6 7TN",
@@ -121,8 +122,9 @@ describe Entities::SubEntities::Contact do
           :contact_channel => {
             :skype => "itccompany"
           },
-          :phone_work => {
+          :phone => {
             :landline => "0208111",
+            :mobile => "0208333",
             :fax => "0208000"
           },
           :address_work => {
