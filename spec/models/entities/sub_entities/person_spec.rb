@@ -130,9 +130,16 @@ describe Entities::SubEntities::Person do
             :first_name => "Serena",
             :last_name => "Smith",
             :mobile => "0777333222",
-            :phone => "0208666555"
-            #At the moment addresses coming from the shipping field
-            #will not be mapped.
+            :phone => "0208666555",
+            :address => {
+              "line1"=>"21 Lead street",
+              "city"=>"London",
+              "postal_code"=>"W2 L34",
+              "state"=>"",
+              "country"=>"United Kingdom"
+            }
+            # At the moment addresses coming from the shipping field
+            # are mapped as a fallback if billing is not provided.
           }.with_indifferent_access
         }
 
