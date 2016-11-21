@@ -144,7 +144,18 @@ describe Entities::SubEntities::Person do
         }
 
         it { expect(subject.map_to('Lead', connec_hash)).to eql(mapped_connec_hash) }
+
+        context 'if shipping address is not provided' do
+
+          let(:connec_hash_without_shipping)          { connec_hash.each { |k, v| v.delete('shipping') if k == 'address_work'}}
+          let(:mapped_connec_hash_with_empty_address) { mapped_connec_hash.except('address').merge({'address' => {}})}
+
+          it 'does not throw an error' do
+            expect(subject.map_to('Lead', connec_hash_without_shipping)).to eql(mapped_connec_hash_with_empty_address)
+          end
+        end
       end
     end
+
   end
 end
