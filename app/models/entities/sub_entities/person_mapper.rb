@@ -30,13 +30,13 @@ class Entities::SubEntities::PersonMapper
     output.delete(:contact_id) if input['is_lead']
 
     # Base CRM does not provide 2 fields for landlines
-    if input['phone_work']['landline2']
+    if input['phone_work'] && input['phone_work']['landline2']
       output[:mobile].empty? ? output[:mobile] = input['phone_work']['landline2'] : output[:mobile]
     end
 
     output[:address] ||= {}
 
-    if input['address_work']['shipping']
+    if input['address_work'] && input['address_work']['shipping']
       output[:address][:line1] ||= input['address_work']['shipping']['line1']
       output[:address][:city] ||= input['address_work']['shipping']['city']
       output[:address][:postal_code] ||= input['address_work']['shipping']['postal_code']
