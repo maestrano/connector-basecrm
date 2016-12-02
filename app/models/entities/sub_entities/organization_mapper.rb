@@ -25,7 +25,7 @@ class Entities::SubEntities::OrganizationMapper
       output[:is_organization] = true
       output[:name] = input['name']
       # Base CRM does not provide 2 fields for landlines
-      output[:mobile] ||= input['phone']['landline2'] if input['phone']['landline2']
+      output[:mobile] ||= input['phone']['landline2'] unless input['phone']['landline2'] && input['phone']['landline2'].empty?
     end
 
     output

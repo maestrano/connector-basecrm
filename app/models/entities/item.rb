@@ -36,6 +36,7 @@ class ItemMapper
     output
   end
 
+
   #map from Connec! to Base
   map from('name'), to('name')
   map from('reference'), to('sku')
