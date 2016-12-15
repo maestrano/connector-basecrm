@@ -27,6 +27,7 @@ describe Entities::SubEntities::Lead do
             "owner_id"=> 960788,
             "first_name"=> "John",
             "last_name"=> "Lead",
+            "organization_name"=> "TEST Ltd.",
             "source_id"=> 342382,
             "created_at"=> "2016-07-28T13:28:43Z",
             "updated_at"=> "2016-07-28T13:28:43Z",
@@ -42,6 +43,18 @@ describe Entities::SubEntities::Lead do
             "industry"=> nil,
             "fax" => "0208111333",
             "website"=> nil,
+            # Notes are fetched in person_and_organization.rb for each contact
+            "notes"=> [
+              {
+               "id"=>75272026,
+               "content"=>"Another NOTE for Mr. Smith",
+               "created_at"=>"2016-11-07T11:20:27Z",
+               "updated_at"=>"2016-11-07T11:20:27Z",
+               "creator_id"=>1027365,
+               "resource_type"=>"contact",
+               "resource_id"=>134706023
+               }
+             ],
             "address"=> {
               "line1"=> "21 Lead street",
               "city"=> "London",
@@ -149,12 +162,12 @@ describe Entities::SubEntities::Lead do
           :contact_channel => {
             :skype => "itccompany"
           },
-          :phone_work => {
+          :phone => {
             :landline => "0208111222",
             :mobile => "0745111222",
             :fax => "0208111333"
           },
-          :address_work => {
+          :address => {
             :billing => {
               :line1 => "99 Lead Company",
               :city => "Edinburgh",

@@ -21,13 +21,13 @@ class Maestrano::Connector::Rails::Entity < Maestrano::Connector::Rails::EntityB
     Maestrano::Connector::Rails::ConnectorLogger.log('info', @organization, "Sending create #{external_entity_name}: #{mapped_connec_entity} to #{Maestrano::Connector::Rails::External.external_name}")
     @external_client.create_entities(mapped_connec_entity, external_entity_name)
   rescue => e
-    readable_error(e, mapped_connec_entity)
+    raise Maestrano::Connector::Rails::Exceptions::ExternalAPIError.new(DataParser.parse_422_error(e))
   end
 
   def update_external_entity(mapped_connec_entity, external_id, external_entity_name)
     Maestrano::Connector::Rails::ConnectorLogger.log('info', @organization, "Sending update #{external_entity_name} (id=#{external_id}): #{mapped_connec_entity} to #{Maestrano::Connector::Rails::External.external_name}")
     @external_client.update_entities(mapped_connec_entity, external_id, external_entity_name)
-  rescue Exceptions::RecordNotFound => e
+  rescue Maestrano::Connector::Rails::Exceptions::EntityNotFoundError => e
     set_deleted_entity_inactive(e, external_id)
   end
 
@@ -53,15 +53,8 @@ class Maestrano::Connector::Rails::Entity < Maestrano::Connector::Rails::EntityB
 
   private
 
-    def readable_error(e, mapped_connec_entity)
-      err = DataParser.parse_422_error(e)
-      idmap = Maestrano::Connector::Rails::IdMap.find_by(organization_id: @organization.id, name: mapped_connec_entity['name'])
-      idmap.update!(message: err)
-      mapped_connec_entity
-    end
-
     def set_deleted_entity_inactive(e, external_id)
       idmap = Maestrano::Connector::Rails::IdMap.find_by(organization_id: @organization.id, external_id: external_id)
-      idmap.update!(message: "The #{external_entity_name} record has been deleted in Base. Last attempt to sync on #{Time.now}", external_inactive: true)
+      idmap.update!(message: "The #{external_id} record has been deleted in Base. Last attempt to sync on #{Time.now}", external_inactive: true)
     end
 end

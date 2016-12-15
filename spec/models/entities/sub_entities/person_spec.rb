@@ -130,14 +130,32 @@ describe Entities::SubEntities::Person do
             :first_name => "Serena",
             :last_name => "Smith",
             :mobile => "0777333222",
-            :phone => "0208666555"
-            #At the moment addresses coming from the shipping field
-            #will not be mapped.
+            :phone => "0208666555",
+            :address => {
+              "line1"=>"21 Lead street",
+              "city"=>"London",
+              "postal_code"=>"W2 L34",
+              "state"=>"",
+              "country"=>"United Kingdom"
+            }
+            # At the moment addresses coming from the shipping field
+            # are mapped as a fallback if billing is not provided.
           }.with_indifferent_access
         }
 
         it { expect(subject.map_to('Lead', connec_hash)).to eql(mapped_connec_hash) }
+
+        context 'if shipping address is not provided' do
+
+          let(:connec_hash_without_shipping)          { connec_hash.each { |k, v| v.delete('shipping') if k == 'address_work'}}
+          let(:mapped_connec_hash_with_empty_address) { mapped_connec_hash.except('address').merge({'address' => {}})}
+
+          it 'does not throw an error' do
+            expect(subject.map_to('Lead', connec_hash_without_shipping)).to eql(mapped_connec_hash_with_empty_address)
+          end
+        end
       end
     end
+
   end
 end

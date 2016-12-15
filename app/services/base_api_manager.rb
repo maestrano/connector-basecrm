@@ -51,10 +51,10 @@ class BaseAPIManager
       DataParser.from_base_single(response.body)
     end
   rescue => e
-    standard_rescue(e, external_entity_name)
+  standard_rescue(e, external_entity_name)
   end
 
-  # Ipdates an existing entity with the parameters provided
+  # Updates an existing entity with the parameters provided
   def update_entities(mapped_connec_entity, external_id, external_entity_name)
     body = DataParser.to_base(mapped_connec_entity)
     payload = JSON.generate(body)
@@ -65,7 +65,7 @@ class BaseAPIManager
     end
   rescue => e
     if e.class == RestClient::ResourceNotFound
-      raise Exceptions::RecordNotFound.new("The record has been deleted in BaseCRM")
+      raise Maestrano::Connector::Rails::Exceptions::EntityNotFoundError.new "The record has been deleted in BaseCRM"
     else
       standard_rescue(e, external_entity_name, external_id)
     end

@@ -34,6 +34,18 @@ describe Entities::SubEntities::Contact do
           "phone"=> "0208111",
           "mobile"=> "0777111",
           "fax"=> "0208000",
+          # Notes are fetched in person_and_organization.rb for each contact
+          "notes"=> [
+            {
+             "id"=>75272026,
+             "content"=>"Another NOTE for Mr. Smith",
+             "created_at"=>"2016-11-07T11:20:27Z",
+             "updated_at"=>"2016-11-07T11:20:27Z",
+             "creator_id"=>1027365,
+             "resource_type"=>"contact",
+             "resource_id"=>134706023
+             }
+           ],
           "address" => {
             "city" => "London",
             "postal_code" => "W6 7TN",
@@ -87,6 +99,7 @@ describe Entities::SubEntities::Contact do
           "is_organization"=> true,
           "phone"=> "0208111",
           "fax"=> "0208000",
+          "mobile"=> "0208333",
           "address" => {
             "city" => "London",
             "postal_code" => "W6 7TN",
@@ -109,11 +122,12 @@ describe Entities::SubEntities::Contact do
           :contact_channel => {
             :skype => "itccompany"
           },
-          :phone_work => {
+          :phone => {
             :landline => "0208111",
+            :mobile => "0208333",
             :fax => "0208000"
           },
-          :address_work => {
+          :address => {
             :billing => {
               :city => 'London',
               :postal_code => 'W6 7TN',
