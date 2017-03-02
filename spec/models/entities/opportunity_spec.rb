@@ -90,7 +90,8 @@ describe 'instance methods' do
         "id" => [{'id' => 2, 'provider' => organization.oauth_provider, 'realm' => organization.oauth_uid}],
         "name" => "Hot Deal",
         "amount" => {
-          "total_amount" => 500.0
+          "total_amount" => 500.0,
+          "currency" => "GBP"
         },
         "sales_stage" => "Incoming",
         "lead_id" => [{"id"=>135906741, "provider"=>"this_app", "realm"=>organization.oauth_uid}],
