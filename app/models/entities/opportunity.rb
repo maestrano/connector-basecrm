@@ -65,6 +65,7 @@ class OpportunityMapper
   #map from Connec! to Base
   map from('name'), to('name')
   map from('amount/total_amount', &:to_f), to('value') { |value| value.is_a?(Integer) ? value : value.to_s }
+  map from('amount/currency'), to('currency')
 
   map from('sales_stage'), to('stage_id')
   map from('expected_close_date'), to('estimated_close_date')
