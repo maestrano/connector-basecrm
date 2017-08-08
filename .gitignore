@@ -13,6 +13,9 @@
 # Ignore bundler config.
 /.bundle
 
+# Ignore TODO lists
+LEFT-TO-DO.*
+
 <% if sqlite3? -%>
 # Ignore the default SQLite database.
 /db/*.sqlite3

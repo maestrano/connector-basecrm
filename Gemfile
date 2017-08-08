@@ -16,6 +16,7 @@ gem 'maestrano-connector-rails', '2.0.0'
 
 gem 'oauth2'
 gem 'basecrm'
+gem 'activeadmin'
 
 group :production, :uat do
   gem 'activerecord-jdbcmysql-adapter', platforms: :jruby

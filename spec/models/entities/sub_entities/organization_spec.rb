@@ -2,7 +2,7 @@ require 'spec_helper'
 
 describe Entities::SubEntities::Organization do
 
-  context "Class Methods" do
+  context 'Class Methods' do
     subject { Entities::SubEntities::Organization }
 
     it { expect(subject.entity_name).to eql('Organization') }
@@ -11,7 +11,7 @@ describe Entities::SubEntities::Organization do
     it { expect(subject.object_name_from_connec_entity_hash({'name' => 'A Company', 'industry' => 'ITC'})).to eql('A Company') }
   end
 
-  context "Instance Methods" do
+  context 'Instance Methods' do
 
     let(:organization) { create(:organization)}
     subject { Entities::SubEntities::Organization.new(organization, nil, nil)}
@@ -29,7 +29,7 @@ describe Entities::SubEntities::Organization do
           },
           'phone' => {
             'landline' => "0208 777 444 56",
-            'landline2' => "0208 777 444 56"
+            'landline2' => "0208 777 444 22"
           },
           'address' => {
             'billing' => {
@@ -50,7 +50,7 @@ describe Entities::SubEntities::Organization do
           :email => "test@test.com",
           :website => "http://test.com",
           :is_organization => true,
-          :mobile => "0208 777 444 56",
+          :mobile => "0208 777 444 22",
           :phone => "0208 777 444 56",
           :address => {
             :line1 => '37 Kinderton Gardens',
@@ -63,6 +63,13 @@ describe Entities::SubEntities::Organization do
         }
 
       it { expect(subject.map_to('Contact', connec_hash)).to eql(mapped_connec_hash) }
+
+      context 'when mobile phone is present, it is not overridden' do
+
+        let(:connec_hash_with_mobile) { connec_hash.merge({'phone' => {'mobile' => '123456', 'landline' => '0208 777 444 56'}})}
+
+        it { expect(subject.map_to('Contact', connec_hash_with_mobile)).to eql(mapped_connec_hash.merge({mobile: '123456'})) }
+      end
     end
   end
 end
