@@ -18,15 +18,17 @@ gem 'oauth2'
 gem 'basecrm'
 gem 'activeadmin'
 
+gem 'redis-rails', '~> 5'
+gem 'newrelic_rpm'
+
 group :production, :uat do
-  gem 'activerecord-jdbcmysql-adapter', platforms: :jruby
   gem 'mysql2', platforms: :ruby
   gem 'rails_12factor'
 end
 
 group :test, :develpment do
-  gem 'activerecord-jdbcsqlite3-adapter', platforms: :jruby
   gem 'sqlite3', platforms: :ruby
+  gem 'pry-byebug'
 end
 
 group :test do
@@ -37,5 +39,3 @@ group :test do
   gem 'shoulda-matchers'
   gem 'timecop'
 end
-gem 'redis-rails', '~> 5'
-gem 'newrelic_rpm'
