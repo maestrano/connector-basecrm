@@ -5,7 +5,6 @@ Rails.application.routes.draw do
   root 'home#index'
   get 'home/index' => 'home#index'
   get 'home/redirect_to_external' => 'home#redirect_to_external'
-  get 'home/index' => 'home#index'
   put 'home/update' => 'home#update'
   post 'home/synchronize' => 'home#synchronize'
 
@@ -20,7 +19,9 @@ Rails.application.routes.draw do
   # Sidekiq Admin
   require 'sidekiq/web'
   Sidekiq::Web.use Rack::Auth::Basic do |username, password|
-    ENV['SIDEKIQ_USERNAME'].present? && username == ENV['SIDEKIQ_USERNAME'] && password == ENV['SIDEKIQ_PASSWORD']
+    ENV['SIDEKIQ_USERNAME'].present? &
+    ActiveSupport::SecurityUtils.secure_compare(username, ENV['SIDEKIQ_USERNAME']) &
+    ActiveSupport::SecurityUtils.secure_compare(password, ENV['SIDEKIQ_PASSWORD'])
   end
   mount Sidekiq::Web => '/sidekiq'
 end

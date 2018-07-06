@@ -21,18 +21,19 @@ LEFT-TO-DO.*
 /db/*.sqlite3
 /db/*.sqlite3-journal
 
-#ignore chache
-dump.rdb
-
 <% end -%>
 # Ignore all logfiles and tempfiles.
 /log/*
 !/log/.keep
 /tmp
 
-# Ignore SimpleCov and rdoc data
-/coverage
-/doc
+config/settings.local.yml
+config/settings/*.local.yml
+config/environments/*.local.yml
 
 # Ignore application configuration
 /config/application.yml
+
+# Ignore coverage and docs
+/coverage
+/doc

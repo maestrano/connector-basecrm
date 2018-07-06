@@ -1,10 +1,10 @@
 require File.expand_path('../boot', __FILE__)
-
 require 'rails/all'
+
+Bundler.require(*Rails.groups)
 
 module TestConnector
   class Application < Rails::Application
-    Bundler.require(*Rails.groups)
     Config::Integrations::Rails::Railtie.preload
 
     config.generators do |g|
