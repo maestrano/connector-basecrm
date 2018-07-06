@@ -4,8 +4,17 @@
 # or operating system, you probably want to add a global ignore instead:
 #   git config --global core.excludesfile '~/.gitignore_global'
 
+#Ignore OSX config files
+/.DS_Store
+/**/.DS_Store
+/**/**/.DS_Store
+/**/**/**/.DS_Store
+
 # Ignore bundler config.
 /.bundle
+
+# Ignore TODO lists
+LEFT-TO-DO.*
 
 <% if sqlite3? -%>
 # Ignore the default SQLite database.
